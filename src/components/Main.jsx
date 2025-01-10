@@ -1,15 +1,44 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import searchIcon from "../assets/search-icon.png"
 import leftArrow from "../assets/leftArrow.png"
 import data from '../assets/data.json'
-import countryCodes from '../assets/countryCodes.json'
+
 
 export default function Main() {
   const [query, setQuery] = useState("");
   const [region, setRegion] = useState("");
   const [targetCountry, setTargetCountry] = useState({})
+  const lastCountry = useRef({})
   const regions = ["Africa", "America", "Asia", "Europe", "Oceania"];
-  const props = {query, setQuery, setRegion, region, regions, setTargetCountry}
+  const props = {query, setQuery, setRegion, region, regions, setTargetCountry, lastCountry}
+
+  function handlePopstate(e){
+    let country = (window.location.href.match(/#.+$/) || [])[0];
+    if (country){
+      setTargetCountry(lastCountry.current)  
+    } else {
+      setTargetCountry({})
+    }
+  }
+
+  useEffect(()=>{
+    let country = (window.location.href.match(/#.+$/) || [])[0];
+    if (country){
+      country = decodeURIComponent(country.slice(1))
+      for (const key in data){
+        if (data[key].name == country){
+          setTargetCountry(data[key])  
+          lastCountry.current = data[key];
+        }
+      }
+    }
+    window.addEventListener('popstate', handlePopstate)
+
+
+    return ()=>{
+      window.removeEventListener('popstate', handlePopstate)
+    }
+  }, [])
   return (
     <main>
       {Object.keys(targetCountry).length != 0? < CountryDetails country={targetCountry} setTargetCountry={setTargetCountry} />: <Countries {...props}/>}
@@ -18,13 +47,17 @@ export default function Main() {
 }
 
 function CountryDetails({country, setTargetCountry}){
-  const codes = {}
+  const codes = {"none": "There is no Border Countries"}
   data.map(c => {
     codes[c.alpha3Code] = c.name.replace(/\([^\)]*\)/, '').trim();
   })
+  function handleClick() {
+    setTargetCountry({})
+    history.back()
+  }
   return (
     <div className="country-details">
-      <button onClick={()=> setTargetCountry({})} className='back-btn'>
+      <button onClick={handleClick} className='back-btn'>
         <img src={leftArrow} alt="" /> Back
       </button>
       <div className="data-container">
@@ -52,7 +85,7 @@ function CountryDetails({country, setTargetCountry}){
             </div>
           </div>
           <div className=" row-3">
-            Border Countries: <span className='borders'>{country.borders.map(b => <span className='border-country'>{codes[b]}</span>)}</span>
+            Border Countries: <span className='borders'>{(country.borders || ["none"]).map(b => <span className='border-country'>{codes[b]}</span>)}</span>
           </div>
         </div>
       </div>
@@ -79,28 +112,33 @@ function Filter(props){
 }
 
 function Countries(props) {
-  const {region, query, setTargetCountry, setRegion, regions, setQuery} = props;
+  const {region, query, setTargetCountry, setRegion, regions, setQuery, lastCountry} = props;
   return (
     <>
     <Filter query={query} setQuery={setQuery} regions={regions} setRegion={setRegion} />
     <div className="countries">
       {data
       .filter(c => (region? c.region == region: true) && (query? new RegExp(`^${query}`, 'i').test(c.name): true))
-      .map((country, i) => <CountryCard country={country} key={i} setTargetCountry={setTargetCountry}/>)
+      .map((country, i) => <CountryCard country={country} key={i} setTargetCountry={setTargetCountry} lastCountry={lastCountry}/>)
       }
     </div>
     </>
   )
 }
 
-function CountryCard({country, setTargetCountry}) {
+function CountryCard({country, setTargetCountry, lastCountry}) {
+
+  const handleClick = ()=> {
+    setTargetCountry(country)
+    lastCountry.current = country;
+  }
   return (
-    <div className='country' onClick={()=> setTargetCountry(country)}>
+    <div className='country' >
       <div className="flag">
         <img src={country.flags.png} alt="" loading='lazy' />
       </div>
       <div className="info">
-        <h2 className="name">{country.name}</h2>
+        <h2 className="name"><a href={`#${country.name}`} onClick={handleClick}>{country.name}</a></h2>
         <p className="population">Population: {country.population.toLocaleString()}</p>
         <p className="region">Region: {country.region}</p>
         <p className="capital">Capital: {country.capital}</p>

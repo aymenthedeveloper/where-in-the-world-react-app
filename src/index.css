@@ -21,6 +21,10 @@ button{
   font-family: 'Nunito Sans', sans-serif;
   cursor: pointer;
 }
+a{
+  text-decoration: none;
+  color: var(--text-clrF);
+}
 body.dark button{
   color: var(--text-clr);
 }
@@ -63,7 +67,7 @@ main{
   padding-block: 3.125rem 0;
   padding-inline: var(--pad-x);
   box-sizing: border-box;
-  
+  margin-bottom: 100px;
 }
 main .filter{
   display: flex;
@@ -137,7 +141,6 @@ main .countries .country{
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   min-width: 262px;
   max-width: 362px;
-  cursor: pointer;
 }
 main .countries .country .flag{
   aspect-ratio: 1/.59999;
