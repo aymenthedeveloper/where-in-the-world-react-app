@@ -94,7 +94,8 @@ function CountryDetails({country, setTargetCountry}){
 }
 
 function Filter(props){
-  const {query, setQuery, regions, setRegion} = props;
+  const {query, setQuery, setRegion} = props;
+  const regions = ["Africa", "America", "Asia", "Europe", "Oceania"];
   return (
       <div className="filter">
         <div className="search-bar">
@@ -112,10 +113,10 @@ function Filter(props){
 }
 
 function Countries(props) {
-  const {region, query, setTargetCountry, setRegion, regions, setQuery, lastCountry} = props;
+  const {region, query, setTargetCountry, setRegion, setQuery, lastCountry} = props;
   return (
     <>
-    <Filter query={query} setQuery={setQuery} regions={regions} setRegion={setRegion} />
+    <Filter query={query} setQuery={setQuery} setRegion={setRegion} />
     <div className="countries">
       {data
       .filter(c => (region? c.region == region: true) && (query? new RegExp(`^${query}`, 'i').test(c.name): true))
