@@ -1,7 +1,6 @@
 import leftArrow from "../assets/leftArrow.png"
-import data from '../assets/data.json'
 
-function CountryDetails({country, setTargetCountry}){
+function CountryDetails({country, setTargetCountry, data}){
   const codes = {"none": "There is no Border Countries"}
   data.map(c => {
     codes[c.alpha3Code] = c.name.replace(/\([^\)]*\)/, '').trim();

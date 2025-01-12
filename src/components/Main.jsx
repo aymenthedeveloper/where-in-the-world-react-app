@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import data from '../assets/data.json'
 import CountryDetails from './CountryDetails'
 import Countries from './Countries'
+import CountryCard from './CountryCard';
+import Filter from "./Filter"
 
 
 export default function Main() {
@@ -9,7 +11,6 @@ export default function Main() {
   const [region, setRegion] = useState("");
   const [targetCountry, setTargetCountry] = useState(getDefaultCountry())
   const lastCountry = useRef(targetCountry)
-  const props = {query, setQuery, setRegion, region, setTargetCountry, lastCountry}
 
   function handlePopstate(e){
     let country = (window.location.href.match(/#.+$/) || [])[0];
@@ -39,11 +40,23 @@ export default function Main() {
     }
   }, [])
 
-  return (
+  if (Object.keys(targetCountry).length != 0){
+    return (
+      <main>
+        < CountryDetails country={targetCountry} setTargetCountry={setTargetCountry} data={data} />
+      </main>
+    )
+  }
+
+  const filteredData = data.filter(c => (region? c.region == region: true) && (query? new RegExp(`^${query}`, 'i').test(c.name): true))
+  .map((country, i) => <CountryCard country={country} key={i} setTargetCountry={setTargetCountry} lastCountry={lastCountry}/>)
+  return(
     <main>
-      {Object.keys(targetCountry).length != 0? (
-        < CountryDetails country={targetCountry} setTargetCountry={setTargetCountry} key={0} />
-      ): <Countries {...props}/>}
+      <Filter query={query} setQuery={setQuery} setRegion={setRegion} />
+      <Countries>
+        {filteredData.length > 0? filteredData:`No results for "${query}"`}
+      </Countries>
     </main>
   )
+
 }
