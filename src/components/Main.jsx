@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
-import data from '../assets/data.json'
 import CountryDetails from './CountryDetails'
 import Countries from './Countries'
 import CountryCard from './CountryCard';
 import Filter from "./Filter"
 
 
-export default function Main() {
+export default function Main({data}) {
   const [query, setQuery] = useState("");
   const [region, setRegion] = useState("");
   const [targetCountry, setTargetCountry] = useState(getDefaultCountry())
@@ -49,7 +48,7 @@ export default function Main() {
   }
 
   const filteredData = data.filter(c => (region? c.region == region: true) && (query? new RegExp(`^${query}`, 'i').test(c.name): true))
-  .map((country, i) => <CountryCard country={country} key={i} setTargetCountry={setTargetCountry} lastCountry={lastCountry}/>)
+  .map(country => <CountryCard country={country} key={country.id} setTargetCountry={setTargetCountry} lastCountry={lastCountry}/>)
   return(
     <main>
       <Filter query={query} setQuery={setQuery} setRegion={setRegion} />
