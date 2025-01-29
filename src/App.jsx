@@ -8,8 +8,6 @@ function App() {
     country.id = i;
     return country;
   })
-  console.log(indexedData);
-  
   return (
     <div className="wrapper">
       <Header/>

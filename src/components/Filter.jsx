@@ -1,14 +1,15 @@
+import { useCallback } from "react";
 import searchIcon from "../assets/search-icon.png"
 
 function Filter(props){
   const {query, setQuery, setRegion} = props;
-  const regions = ["Africa", "America", "Asia", "Europe", "Oceania"];
+  const regions = [ "Africa", "America", "Asia", "Europe", "Oceania"];
 
-  function handleUserInput(e){
+  const handleUserInput = useCallback(function(e){
     let input = e.target.value;
     input = input.replace(/[.*+?^${}()|[\]\\]/g, '');
     setQuery(input)
-  }
+  })
   return (
       <div className="filter">
         <div className="search-bar">
@@ -19,6 +20,7 @@ function Filter(props){
         </div>
         <select name="Filter" id="Filter" className='region-filter' defaultValue={""} onChange={(e)=>setRegion(e.target.value)}>
           <option value="" disabled hidden>Filter by Region</option>
+          <option value="">All</option>
           {regions.map((reg, i) => <option key={i} value={reg}>{reg}</option>)}
         </select>
       </div>
