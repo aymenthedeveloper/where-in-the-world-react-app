@@ -3,9 +3,10 @@ import CountryDetails from './CountryDetails'
 import Countries from './Countries'
 import CountryCard from './CountryCard';
 import Filter from "./Filter"
+import data from '../assets/data.json'
 
 
-export default function Main({data}) {
+export default function Main() {
   const [query, setQuery] = useState("");
   const [region, setRegion] = useState("");
   const [targetCountry, setTargetCountry] = useState(getDefaultCountry())
@@ -52,7 +53,7 @@ export default function Main({data}) {
     )
   }
   const filteredCountriesByQuery = filteredCountriesByRegion.filter(c => query? new RegExp(`^${query}`, 'i').test(c.name): true);
-  const displayedCountries = filteredCountriesByQuery.map(c => <CountryCard country={c} key={c.id} {...{setTargetCountry, lastCountry}}/>)
+  const displayedCountries = filteredCountriesByQuery.map(c => <CountryCard country={c} key={c.alpha3Code} {...{setTargetCountry, lastCountry}}/>)
 
   return(
     <main>

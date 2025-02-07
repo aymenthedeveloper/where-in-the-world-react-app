@@ -9,7 +9,7 @@ function Filter(props){
     let input = e.target.value;
     input = input.replace(/[.*+?^${}()|[\]\\]/g, '');
     setQuery(input)
-  })
+  }, [])
   return (
       <div className="filter">
         <div className="search-bar">
