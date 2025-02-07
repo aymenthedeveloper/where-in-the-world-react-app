@@ -1,4 +1,4 @@
-import React from 'react';
+import { Link } from "react-router"
 import { useEffect, useState } from "react"
 import moonOutline from "../assets/moon-outline.png"
 import moonFill from "../assets/moon-fill.png"
@@ -20,7 +20,7 @@ export default function Header() {
   }, [darkMode])
   return (
     <header>
-      <div className="logo">Where in the world?</div>
+      <div className="logo"><Link to={"/"}>Where in the world?</Link></div>
       <button className='theme-toggle' onClick={()=> setDarkMode(!darkMode)}>
         <img src={darkMode == true? moonFill: moonOutline} alt="moon icon " />
         Dark Mode
