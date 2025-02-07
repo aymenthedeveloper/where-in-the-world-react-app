@@ -1,13 +1,23 @@
+import { useParams } from "react-router";
 import leftArrow from "../assets/leftArrow.png"
+import data from "../assets/data.json"
+import NotFound from "./NotFound";
 
-function CountryDetails({country, setTargetCountry, data}){
+function CountryDetails(props){
+  let {targetCountry} = useParams();
+  targetCountry = targetCountry.replace(/_/g, ' ')
+  const country = data.find((c) => c.name == targetCountry)
   const codes = {"none": "There is no Border Countries"}
   data.map(c => {
     codes[c.alpha3Code] = c.name.replace(/\([^\)]*\)/, '').trim();
   })
   function handleClick() {
-    setTargetCountry({})
     history.back()
+  }
+
+
+  if (!country){
+    return <NotFound message={`"${targetCountry}" was not found!`}/>
   }
   return (
     <div className="country-details">
