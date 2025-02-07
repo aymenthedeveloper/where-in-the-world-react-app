@@ -1,8 +1,11 @@
-import { useCallback } from "react";
+import { useCallback, useRef, useState } from "react";
 import searchIcon from "../assets/search-icon.png"
 
 function Filter(props){
+  console.count("filter");
   const {setSearchParams, query, region} = props;
+  const [value, setValue]= useState(query);
+  const timeoutId = useRef()
   const regions = [ "Africa", "America", "Asia", "Europe", "Oceania"];
 
   const handleRegionChange = useCallback((e)=>{
@@ -17,10 +20,8 @@ function Filter(props){
     })
   }, [])
   
-  const handleUserInput = useCallback(function(e){
+  function updateQuery(query){
     setSearchParams((params) =>{
-      let query = e.target.value;
-      query = query.replace(/[.*+?^${}()|[\]\\]/g, '');
       if (query.length){
         params.set('country', query);
       }else {
@@ -28,6 +29,13 @@ function Filter(props){
       }
       return params;
     })
+  }
+  const handleUserInput = useCallback(function(e){
+    clearTimeout(timeoutId.current)
+    let query = e.target.value;
+    query = query.replace(/[.*+?^${}()|[\]\\]/g, '');
+    setValue(query)
+    timeoutId.current = setTimeout(()=> updateQuery(query), 250) // only update params if user stops typing
   }, [])
   return (
       <div className="filter">
@@ -35,7 +43,7 @@ function Filter(props){
           <div className="img-container">
             <img src={searchIcon} alt="search icon" />
           </div>
-          <input type="text" value={query} placeholder='Search for a country...' onChange={handleUserInput} />
+          <input type="text" value={value} placeholder='Search for a country...' onChange={handleUserInput} />
         </div>
         <select name="Filter" id="Filter" className='region-filter' defaultValue={region} onChange={handleRegionChange}>
           <option value="" disabled hidden>Filter by Region</option>

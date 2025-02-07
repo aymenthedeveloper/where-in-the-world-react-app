@@ -6,6 +6,7 @@ import { useSearchParams } from 'react-router';
 
 
 export default function Main() {
+  console.count("main");
   const [searchParams, setSearchParams] = useSearchParams()
   const region = searchParams.get('region') || '';
   const query = searchParams.get('country') || '';  

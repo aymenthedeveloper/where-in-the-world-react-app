@@ -4,6 +4,8 @@ import moonOutline from "../assets/moon-outline.png"
 import moonFill from "../assets/moon-fill.png"
 
 export default function Header() {
+  
+  
   const isDarkMode = (JSON.parse(localStorage.getItem('dark-mode')) || {value: false})
   const [darkMode, setDarkMode] = useState(isDarkMode.value);
   function persisetData(){
