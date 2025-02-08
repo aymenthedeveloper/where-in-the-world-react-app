@@ -20,10 +20,10 @@ function Filter(props){
     })
   }, [])
   
-  function updateQuery(query){
+  function updateQuery(){
     setSearchParams((params) =>{
-      if (query.length){
-        params.set('country', query);
+      if (value.length){
+        params.set('country', value);
       }else {
         params.delete("country")
       }
@@ -31,18 +31,19 @@ function Filter(props){
     })
   }
   const handleUserInput = useCallback(function(e){
-    clearTimeout(timeoutId.current)
     let query = e.target.value;
     query = query.replace(/[.*+?^${}()|[\]\\]/g, '');
     setValue(query)
-    timeoutId.current = setTimeout(()=> updateQuery(query), 250) // only update params if user stops typing
+    if (query.length == 0){
+      updateQuery()
+    }
   }, [])
   return (
       <div className="filter">
         <div className="search-bar">
-          <div className="img-container">
-            <img src={searchIcon} alt="search icon" />
-          </div>
+          <button className="search-btn" onClick={updateQuery}>
+            <img src={searchIcon} className="search-icon" alt="search icon" />
+          </button>
           <input type="text" value={value} placeholder='Search for a country...' onChange={handleUserInput} />
         </div>
         <select name="Filter" id="Filter" className='region-filter' defaultValue={region} onChange={handleRegionChange}>

@@ -106,18 +106,22 @@ main .filter .search-bar{
   background-color: transparent;
   border-radius: var(--radius);
 }
-main .filter .search-bar .img-container{
+main .filter .search-bar .search-btn{
   width: 72px;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  border: none;
   color: var(--text-clr);
   background-color: var(--elements-bg-clr);
   border-radius: var(--radius) 0px 0px var(--radius);
 }
-main .filter .search-bar .img-container img{
+main .filter .search-bar .search-btn:is(:active, :hover){
+  filter: brightness(0.9);
+}
+main .filter .search-bar .search-btn img{
   height: 15px;
   padding-left: 6px;
 }
@@ -264,7 +268,7 @@ main .country-details .data-container .data .row-3 .borders .border-country{
 
 body.dark main .country-details .back-btn img,
 body.dark header .theme-toggle img,
-body.dark main .filter .search-bar .img-container img{
+body.dark main .filter .search-bar .search-btn img{
   filter: invert(1);
 }
 /* --------------- media queries --------------- */
